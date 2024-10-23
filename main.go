@@ -2,7 +2,7 @@ package main
 
 import (
 	"SiteSense/cmd"
-	"SiteSense/common/logger"
+	"SiteSense/pkg/logger"
 )
 
 func main() {
@@ -10,5 +10,5 @@ func main() {
 
 	cmd.Execute()
 
-	logger.Warn("salam")
+	logger.Info("start using application")
 }
