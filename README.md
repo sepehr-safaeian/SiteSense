@@ -1,7 +1,5 @@
 # SiteSense
 
-![SiteSense Logo](https://example.com/logo.png) <!-- Replace with your logo URL -->
-
 SiteSense is a free and open-source command-line interface (CLI) tool developed in Go that analyzes URLs for various essential web metrics. With a focus on SEO, performance, security, usability, and accessibility, SiteSense empowers developers and webmasters to enhance their websites effectively.
 
 ## Table of Contents
