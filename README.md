@@ -27,6 +27,7 @@ To install SiteSense, ensure you have Go installed on your system. Then, run the
 
 ```bash
 go run build ./main.go
+```
 
 
 # Usage
@@ -34,10 +35,12 @@ To analyze a website, execute the following command:
 
 ```bash
 ./main scan https://example.com
+```
 
 The analysis results will be saved in the following path:
 ```bash
 /data/example.com.txt
+```
 
 
 # Sample Output
@@ -90,3 +93,4 @@ Images without Alt Text:
  - https://example.com/wp-content/uploads/2024/05/5699565.webp
  - https://example.com/wp-content/uploads/2024/04/81.png
 
+```
