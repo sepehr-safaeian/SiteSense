@@ -5,34 +5,44 @@ import (
 	"SiteSense/internal/process"
 	"SiteSense/pkg/logger"
 	"SiteSense/pkg/models"
+	"fmt"
 	"os"
 	"strings"
 )
 
 // Collector triggers the collection process for a given URL
 func Collector(url string) {
-	// Collect SEO data from the URL
 	seoData, collectedURL := collectors.SeoCollector(url)
 
-	// Check if the collected data is valid
-	if !seoData.MetaTitlePresent {
+	// Validate the collected data
+	if err := validateSeoData(seoData, collectedURL); err != nil {
 		log := logger.NewCustomLogger()
-		log.Error("No H1 tag found for the URL: " + collectedURL)
+		log.Error(err.Error())
 		return
 	}
 
 	// Create a file and save the collected data
-	createFile(collectedURL, seoData)
+	if err := createFile(collectedURL, seoData); err != nil {
+		log := logger.NewCustomLogger()
+		log.Error(err.Error())
+	}
+}
+
+// validateSeoData checks if the SEO data contains a valid title
+func validateSeoData(seoData models.SEOMetrics, collectedURL string) error {
+	if !seoData.MetaTitlePresent {
+		return fmt.Errorf("no H1 tag found for the URL: %s", collectedURL)
+	}
+	return nil
 }
 
 // createFile generates a new file based on the URL, storing the collected data in the ./data directory
-func createFile(url string, seoData models.SEOMetrics) {
+func createFile(url string, seoData models.SEOMetrics) error {
 	log := logger.NewCustomLogger()
 
 	// Ensure the ./data directory exists
-	if err := os.MkdirAll("./data", 0755); err != nil {
-		log.Error("Error creating directory: " + err.Error())
-		return
+	if err := os.MkdirAll("./data", os.ModePerm); err != nil {
+		return fmt.Errorf("error creating directory: %w", err)
 	}
 
 	// Convert the URL to a valid filename
@@ -42,33 +52,33 @@ func createFile(url string, seoData models.SEOMetrics) {
 	// Create or open the file
 	file, err := os.Create(filePath)
 	if err != nil {
-		log.Error("Error creating file: " + err.Error())
-		return
+		return fmt.Errorf("error creating file: %w", err)
 	}
 	defer file.Close()
 
 	// Write collected SEO data to the file
 	content := formatSeoData(seoData)
 	if _, err := file.WriteString(content); err != nil {
-		log.Error("Error writing to file: " + err.Error())
-		return
+		return fmt.Errorf("error writing to file: %w", err)
 	}
 
 	log.Info("File created successfully: " + filePath)
+	return nil
 }
 
 // sanitizeFileName converts a URL to a safe and valid filename
 func sanitizeFileName(url string) string {
-	url = strings.Replace(url, "http://", "", 1)
-	url = strings.Replace(url, "https://", "", 1)
-	return strings.NewReplacer(
+	url = strings.TrimPrefix(url, "http://")
+	url = strings.TrimPrefix(url, "https://")
+	replacer := strings.NewReplacer(
 		"/", "-",
 		":", "-",
 		"?", "-",
 		"&", "-",
 		"=", "-",
 		"#", "-",
-	).Replace(url)
+	)
+	return replacer.Replace(url)
 }
 
 // formatSeoData formats the SEO data into a string for file output
