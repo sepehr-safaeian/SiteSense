@@ -12,10 +12,17 @@ import (
 // Collector triggers the collection process for a given URL
 func Collector(url string) {
 	// Collect SEO data from the URL
-	seoData := collectors.SeoCollector(url)
+	seoData, collectedURL := collectors.SeoCollector(url)
+
+	// Check if the collected data is valid
+	if !seoData.MetaTitlePresent {
+		log := logger.NewCustomLogger()
+		log.Error("No H1 tag found for the URL: " + collectedURL)
+		return
+	}
 
 	// Create a file and save the collected data
-	createFile(url, seoData)
+	createFile(collectedURL, seoData)
 }
 
 // createFile generates a new file based on the URL, storing the collected data in the ./data directory

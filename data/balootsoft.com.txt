@@ -1,2 +1,11 @@
-H1 Tag: بلوط سافت
-H1 Tag Present: true
+SEO Metrics:
+
+URL: https://balootsoft.com
+
+Title(h1) Tag Present: ✅
+Title(h1) Tag Text: بلوط سافت
+Title(h1) Tag Length: 17
+
+Meta Description Present: ✅
+Meta Description: ارائه نرم‌افزارهای مدیریت پروژه، مدیریت دانش و باقی نرم‌افزارهای اداری روز دنیا به صورت غیررسمی و با قیمتی مقرون به صرفه با بلوط سافت
+Meta Description Length: 245
